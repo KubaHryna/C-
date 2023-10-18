@@ -1,0 +1,102 @@
+namespace cw1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnstart_Click(object sender, EventArgs e)
+        {
+
+            int licznik = (int)liczban.Value;
+     
+            ulong wynik = Fib2(licznik);
+            
+
+            MessageBox.Show(wynik.ToString());
+        }
+
+        private void btnsort_Click(object sender, EventArgs e)
+        {
+            int[] tab = { 5, 7, 2, 4, 5 };
+            string output = string.Empty;
+            tab = sort_babel(tab);
+            for (int i = 0; i < tab.Length; i++)
+            {
+                output += tab[i] + " ";
+            }
+            MessageBox.Show(output);
+        }
+
+        int Fib(int n)
+        {
+            if(n == 0) return 0; 
+            if(n == 1) return 1; 
+          
+            return Fib(n - 1) + Fib(n - 2);
+            
+        }
+        ulong Fib2(int n) 
+        {
+            ulong[] wyrazy = new ulong[n+1];
+            if (n == 0) wyrazy[0] = 0;
+            if (n == 1) wyrazy[1] = 1;
+            for (int i = 2; i < wyrazy.Length; i++)
+            {
+                wyrazy[i] = wyrazy[i - 1] + wyrazy[i - 2];
+            }
+            ulong wynik = wyrazy[n];
+            return wynik;
+
+
+        }
+
+         int[]sort_babel(int[] tab)
+        {
+            string output = string.Empty;
+            bool cbz = true;
+            int dl = tab.Length;
+            while (cbz == true)
+            {
+                int x = 0;
+                for (int i = 0; i < dl-1 ; i++)
+                {
+                    if (tab[i] > tab[i + 1])
+                    {
+                        int pom = tab[i + 1];
+                        tab[i + 1] = tab[i];
+                        tab[i] = pom;
+                    }
+                    else
+                    {
+                        x++;
+                    }
+                }
+                if (x == dl - 1)
+                {
+                    cbz = false;
+                }
+            }
+            return tab;
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+       
+    }
+}
