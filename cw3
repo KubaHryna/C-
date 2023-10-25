@@ -1,3 +1,5 @@
+using System.Reflection.Emit;
+
 namespace cw1
 {
     public partial class Form1 : Form
@@ -17,7 +19,7 @@ namespace cw1
 
             int licznik = (int)liczban.Value;
      
-            ulong wynik = Fib2(licznik);
+            long wynik = Fib2(licznik);
             
 
             MessageBox.Show(wynik.ToString());
@@ -43,16 +45,19 @@ namespace cw1
             return Fib(n - 1) + Fib(n - 2);
             
         }
-        ulong Fib2(int n) 
+        long Fib2(int n) 
         {
-            ulong[] wyrazy = new ulong[n+1];
-            if (n == 0) wyrazy[0] = 0;
-            if (n == 1) wyrazy[1] = 1;
+            if (n == 0) 
+                return 0;
+            
+            long[] wyrazy = new long[n+1];            
+            wyrazy[0] = 0;
+            wyrazy[1] = 1;
             for (int i = 2; i < wyrazy.Length; i++)
             {
                 wyrazy[i] = wyrazy[i - 1] + wyrazy[i - 2];
             }
-            ulong wynik = wyrazy[n];
+            long wynik = wyrazy[n];
             return wynik;
 
 
@@ -97,6 +102,41 @@ namespace cw1
 
         }
 
-       
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int[] liczby = convert();
+            sort_babel(liczby);
+            string napis = String.Join(' ', liczby);
+            lbl.Text = napis;
+            int[] convert()
+            {
+                string napis = TextBox.Text;
+                var liczbys = napis.Trim().Split(' ');
+                int [] liczby = new int[liczbys.Length];
+                for(int i = 0; i < liczbys.Length; i++)
+                {
+                    liczby[i] = int.Parse(liczbys[i]);
+
+
+                }
+
+                return liczby;
+
+
+            }
+
+
+
+        }
     }
 }
