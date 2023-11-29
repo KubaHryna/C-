@@ -1,0 +1,309 @@
+using System.Security.Cryptography.X509Certificates;
+
+namespace Project2_classes_
+{
+    public partial class Form1 : Form
+    {
+        public List<Węzeł2> lista = new List<Węzeł2>();
+
+        string s = "";
+        public Form1()
+        {
+            InitializeComponent();
+            
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_Click(object sender, EventArgs e)
+        {
+            
+            Węzeł w1 = new Węzeł(5);
+            Węzeł w2 = new Węzeł(3);
+            Węzeł w3 = new Węzeł(1);
+            Węzeł w4 = new Węzeł(2);
+            Węzeł w5 = new Węzeł(4);
+            Węzeł w6 = new Węzeł(6);
+
+            w1.dzieci.Add(w2);
+            w1.dzieci.Add(w3);
+            w1.dzieci.Add(w4);
+            w2.dzieci.Add(w5);
+            w2.dzieci.Add(w6);
+            B(w1);
+            MessageBox.Show(s);
+            s = "";
+
+        }
+        void B(Węzeł w)
+        {
+            s += " " + w.wartosc.ToString();
+            foreach (var el in w.dzieci)
+            {
+                B(el);
+
+            }
+
+
+        }
+        void A(Węzeł2 w)
+        {
+            
+            s += " " + w.wartosc.ToString();
+            lista.Add(w);
+            foreach (var sasiad in w.sasiedzi)
+            {
+                if (!lista.Contains(sasiad))
+                {
+                    lista.Add(sasiad);
+                    A(sasiad);
+                }
+                
+            }
+           
+          
+
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            Węzeł2 w1 = new Węzeł2(1);
+            Węzeł2 w2 = new Węzeł2(2);
+            Węzeł2 w3 = new Węzeł2(3);
+            Węzeł2 w4 = new Węzeł2(4);
+            Węzeł2 w5 = new Węzeł2(5);
+            Węzeł2 w6 = new Węzeł2(6);
+            Węzeł2 w7 = new Węzeł2(7);
+            w1.Add(w2);
+            w1.Add(w7);
+            w2.Add(w3);
+            w2.Add(w5);
+            w3.Add(w4);
+            w4.Add(w6);
+            w6.Add(w7);
+            
+
+            A(w1);
+            MessageBox.Show(s);
+            s = "";
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DrzewoBinarne d1 = new DrzewoBinarne(5);
+            d1.Add(5);
+            d1.Add(3);
+            d1.Add(8);
+            d1.Add(1);
+            d1.Add(1);
+            d1.Add(4);
+            d1.Add(6);
+            d1.Add(5);
+            d1.Add(9);
+            
+
+        }
+
+        private void DrzewoBin_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            
+            DrzewoBinarne d1 = new DrzewoBinarne(5);
+            d1.Add(5);
+            d1.Add(3);
+            d1.Add(8);
+            d1.Add(1);
+            d1.Add(1);
+            d1.Add(4);
+            d1.Add(6);
+            d1.Add(5);
+            d1.Add(9);
+            
+
+
+
+        }
+    }
+    class Węzeł
+    {
+        public int wartosc;
+        public List<Węzeł> dzieci = new List<Węzeł>();
+        public Węzeł(int liczba)
+        {
+            this.wartosc = liczba;
+        }
+
+    }
+    public class Węzeł2
+    {
+        public int wartosc;
+        public List<Węzeł2> sasiedzi = new List<Węzeł2>();
+        public Węzeł2(int liczba)
+        {
+            this.wartosc = liczba;
+
+        }
+        public void Add(Węzeł2 w)
+        {
+            if (w == this) return;
+
+            if (!this.sasiedzi.Contains(w))
+            {
+                this.sasiedzi.Add(w);
+
+            }
+            if (!w.sasiedzi.Contains(this))
+            {
+                w.sasiedzi.Add(this);
+            }
+
+        }
+
+    }
+
+    public class Węzeł3
+    {
+        public int wartosc;
+        public Węzeł3 rodzic;
+        public Węzeł3 prawedziecko;
+        public Węzeł3 lewedziecko;
+        public Węzeł3(int liczba)
+        {
+            this.wartosc = liczba;
+        }
+        
+        public override string ToString()
+        {
+            return this.wartosc.ToString();
+        }
+
+        public void Add2(int liczba)
+        {
+            var dziecko = new Węzeł3(liczba);
+            dziecko.rodzic = this;
+            if (liczba < this.wartosc)
+            {
+                this.lewedziecko = dziecko;
+            }
+            else
+            {
+                this.prawedziecko = dziecko;
+            }
+            
+        }
+    }
+    public class DrzewoBinarne
+    {
+        public Węzeł3 korzen;
+        public int liczba_wezłow;
+        public DrzewoBinarne(int liczba)
+        {
+            this.korzen = new(liczba);
+            this.liczba_wezłow = 1;
+
+        }
+
+        public void Add(int liczba)
+        {          
+            if (korzen==null)
+            {
+                korzen = new Węzeł3(liczba);
+                return;
+            }
+            Węzeł3 current = korzen;
+            if (liczba < current.wartosc)
+            {
+                if (current.lewedziecko == null)
+                {
+                    current.lewedziecko = new Węzeł3(liczba);
+                    current.lewedziecko.rodzic = current;
+                    
+                    liczba_wezłow++;
+
+                }
+                else
+                {
+                    current = current.lewedziecko;
+
+                }
+
+
+            }else if(liczba >= current.wartosc)
+            {
+                if (current.prawedziecko == null)
+                {
+                    current.prawedziecko = new Węzeł3(liczba);
+                    current.prawedziecko.rodzic = current;                   
+                    liczba_wezłow++;
+                    return;
+                }
+                else
+                {
+                    current = current.prawedziecko;
+                }
+
+
+
+            }
+            else
+            {
+                return;
+            }
+
+        }
+
+        public void Add2(int liczba)
+        {
+            Węzeł3 rodzic = this.ZnajdzRodzica(liczba);
+            rodzic.Add2(liczba);
+
+        }
+        public Węzeł3 ZnajdzRodzica(int liczba)
+        {
+            var w = this.korzen;
+            while (true)
+            {
+                if (liczba < w.wartosc)
+                {
+                    if(w.lewedziecko == null)
+                    {
+                        return w;
+                    }
+                    else
+                    {
+                        w = w.lewedziecko;
+                    }
+                }else if (liczba > w.wartosc)
+                {
+                    if(w.prawedziecko == null)
+                    {
+                        return w;
+                    }
+                    else
+                    {
+                        w = w.prawedziecko;
+                    }
+                }
+
+
+
+            }
+
+
+        }
+
+
+    }
+
+}
+// 1)Węzeł 3 Znajdź(int liczba) ma znalezc liczbe ktora chcemy znalezc
+// 2)Węzeł3 ZnajdźMin(Węzeł3 w) ma znalezc najmniejsza liczbe w drzewie (na maxa w lewo)
+// 3)Węzeł3 ZnajdźMax(Węzeł3 w) ma znalezc najwieksza liczbe w drzewie (na maxa w prawo)
+// 4)Węzeł3 Następnik(Węzeł3 w)
+//    a)jesli jest prawe dziecko to uzyj ZnajdzMin(w.prawedziecko)
+//    b)jesli nie ma prawego dziecko to idz do gory, aż wyjdziesz jako lewe dziecko rodzica, następnik to rodzic
+//    c)jezeli nie ma prawego dziecka, i idac do gory nie ma (2), to nie ma nastepnika
+//5)Węzeł Poprzednik(Węzeł3 w)
