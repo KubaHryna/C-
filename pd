@@ -225,44 +225,37 @@ namespace Praca_Domowa
             }
             public Węzeł3 znajdzmin(Węzeł3 w)
             {
-                while (true)
+                while (w.lewedziecko != null)
                 {
-                    if (w.lewedziecko == null)
-                    {
-                        return w;
-                    }
-                    else
-                    {
-                        w = w.lewedziecko;
-                    }
+                   w = w.lewedziecko;
                 }
+                return w;
 
             }
 
             public Węzeł3 znajdzmax(Węzeł3 w)
             {
 
-                while (true)
+                while (w.prawedziecko !=null)
                 {
-                    if (w.prawedziecko == null)
-                    {
-                        return w;
-                    }
-                    else
-                    {
-                        w = w.prawedziecko;
-                    }
+                   w = w.prawedziecko;
                 }
+                return w;
             }
 
             public Węzeł3 następnik(Węzeł3 w)
             {
                 if (w.prawedziecko != null)
                 {
-                    znajdzmin(w.prawedziecko);
+                   return  this.znajdzmin(w.prawedziecko);
                 }
-                else if (w.lewedziecko == null)
+                
+                while(w.rodzic != null)
                 {
+                    if(w.rodzic.lewedziecko == w){
+                        return w.rodzic;             
+                    }
+
                     w = w.rodzic;
                 }
                 else
