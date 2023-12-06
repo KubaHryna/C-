@@ -1,0 +1,273 @@
+using static Lab9.Form1;
+
+namespace Lab9
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        public class Węzeł3
+        {
+            public int wartosc;
+            public Węzeł3 rodzic;
+            public Węzeł3 prawedziecko;
+            public Węzeł3 lewedziecko;
+            public Węzeł3(int liczba)
+            {
+                this.wartosc = liczba;
+            }
+
+            public override string ToString()
+            {
+                return this.wartosc.ToString();
+            }
+
+            public void Add2(int liczba)
+            {
+                var dziecko = new Węzeł3(liczba);
+                dziecko.rodzic = this;
+                if (liczba < this.wartosc)
+                {
+                    this.lewedziecko = dziecko;
+                }
+                else
+                {
+                    this.prawedziecko = dziecko;
+                }
+
+            }
+        }
+        public class DrzewoBinarne
+        {
+            public Węzeł3 korzen;
+            public int liczba_wezłow;
+            public DrzewoBinarne(int liczba)
+            {
+                this.korzen = new(liczba);
+                this.liczba_wezłow = 1;
+
+            }
+
+            public void Add(int liczba)
+            {
+                if (korzen == null)
+                {
+                    korzen = new Węzeł3(liczba);
+                    return;
+                }
+                Węzeł3 current = korzen;
+                if (liczba < current.wartosc)
+                {
+                    if (current.lewedziecko == null)
+                    {
+                        current.lewedziecko = new Węzeł3(liczba);
+                        current.lewedziecko.rodzic = current;
+
+                        liczba_wezłow++;
+
+                    }
+                    else
+                    {
+                        current = current.lewedziecko;
+
+                    }
+
+
+                }
+                else if (liczba >= current.wartosc)
+                {
+                    if (current.prawedziecko == null)
+                    {
+                        current.prawedziecko = new Węzeł3(liczba);
+                        current.prawedziecko.rodzic = current;
+                        liczba_wezłow++;
+                        return;
+                    }
+                    else
+                    {
+                        current = current.prawedziecko;
+                    }
+
+
+
+                }
+                else
+                {
+                    return;
+                }
+
+            }
+
+            public void Add2(int liczba)
+            {
+                Węzeł3 rodzic = this.ZnajdzRodzica(liczba);
+                rodzic.Add2(liczba);
+
+            }
+            public Węzeł3 ZnajdzRodzica(int liczba)
+            {
+                var w = this.korzen;
+                while (true)
+                {
+                    if (liczba < w.wartosc)
+                    {
+                        if (w.lewedziecko == null)
+                        {
+                            return w;
+                        }
+                        else
+                        {
+                            w = w.lewedziecko;
+                        }
+                    }
+                    else if (liczba > w.wartosc)
+                    {
+                        if (w.prawedziecko == null)
+                        {
+                            return w;
+                        }
+                        else
+                        {
+                            w = w.prawedziecko;
+                        }
+                    }
+
+
+
+                }
+
+
+            }
+            public int Znajdz(int liczba)
+            {
+                var w = this.korzen;
+                while (true)
+                {
+                    if (liczba < w.wartosc)
+                    {
+                        if (liczba == w.lewedziecko.wartosc)
+                        {
+                            return w.lewedziecko.wartosc;
+                        }
+                        else
+                        {
+                            w = w.lewedziecko;
+                        }
+
+                    }
+                    else if (liczba > w.wartosc)
+                    {
+                        if (liczba == w.prawedziecko.wartosc)
+                        {
+                            return w.prawedziecko.wartosc;
+                        }
+                        else
+                        {
+                            w = w.prawedziecko;
+                        }
+                    }
+                    else
+                    {
+                        if (liczba == w.wartosc)
+                        {
+                            return w.wartosc;
+                        }
+                    }
+
+
+                }
+            }
+            public Węzeł3 znajdzmin(Węzeł3 w)
+            {
+                while (w.lewedziecko != null)
+                {
+                    w = w.lewedziecko;
+                }
+                return w;
+
+            }
+
+            public Węzeł3 znajdzmax(Węzeł3 w)
+            {
+
+                while (w.prawedziecko != null)
+                {
+                    w = w.prawedziecko;
+                }
+                return w;
+            }
+
+            public Węzeł3 nastepnik(Węzeł3 w)
+            {
+                if (w.prawedziecko != null)
+                {
+                    return this.znajdzmin(w.prawedziecko);
+                }
+
+                while (w.rodzic != null)
+                {
+                    if (w.rodzic.lewedziecko == w)
+                    {
+                        return w.rodzic;
+                    }
+
+                    w = w.rodzic;
+                }
+
+
+                return null;
+
+
+
+            }
+            public Węzeł3 Poprzednik(Węzeł3 w)
+            {
+                if (w.lewedziecko != null)
+                {
+                    return znajdzmax(w.lewedziecko);
+                }
+
+                while (w.rodzic != null)
+                {
+                    if (w.rodzic.prawedziecko == w)
+                    {
+                        return w.rodzic;
+                    }
+
+                    w = w.rodzic;
+                }
+
+
+                return null;
+
+            }
+
+           
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var d = new DrzewoBinarne(5);
+            d.Add(4);
+            d.Add(2);
+            d.Add(3);
+            d.Add(8);
+            d.Add(7);
+            d.Add(9);
+            var w = d.znajdzmin(d.korzen);
+            MessageBox.Show(w.ToString());
+            while (w != null)
+            {
+                w = d.nastepnik(w);
+            }
+        }
+    }
+}
