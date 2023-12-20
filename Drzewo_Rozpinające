@@ -1,0 +1,100 @@
+using System.Collections;
+using System.Security.Cryptography.X509Certificates;
+
+namespace Drzewo_rozpinające
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+    public class Wezel4
+    {
+        public int wartosc;
+        public List<Krawedz> listaKrawedziWezla;
+
+    }
+   public class Krawedz
+    {
+        public int waga;
+        public Wezel4 poczatek;
+        public Wezel4 koniec;
+    }
+    public class Graf
+    {
+        public List<Wezel4> lista_Wezlow;
+        public List<Krawedz> lista_Krawedzi;
+        public Graf(Krawedz k)
+        {
+            lista_Krawedzi.Add(k);
+            lista_Wezlow.Add(k.poczatek);
+            lista_Wezlow.Add(k.koniec);
+        }
+
+        int Sprawdz(Krawedz k)
+        {
+            int wynik = 0;
+            for(int i = 0; i < lista_Krawedzi.Count(); i++)
+            {
+                if (!this.lista_Wezlow.Contains(k.poczatek))
+                {
+                    wynik++;
+                }
+                if (!this.lista_Wezlow.Contains(k.koniec))
+                {
+                    wynik++;
+                }
+            }
+            return wynik;
+        }
+        public Graf Algkruskala()
+        {
+            var krawedzie = this.lista_Krawedzi.OrderBy(k => k.waga);
+            var Grafy = new List<Graf>();
+            foreach(var k in krawedzie)
+            {
+                if (Grafy.Count() == 0)
+                {
+                    Grafy.Add(new Graf(k));
+                    continue;
+                }
+                Graf czy_ponownie = null;
+                for(int i = 0 ;i< Grafy.Count();i++)
+                {
+                    var ile_nowych_wezlow = Grafy[i].Sprawdz(k);
+                    if(ile_nowych_wezlow==0)
+                    {
+                        continue;
+
+                    }
+                    else if (ile_nowych_wezlow == 1)
+                    {
+                        if (czy_ponownie == null)
+                        {
+                            Grafy[i].Add(k);
+                            czy_ponownie = Grafy[i];
+                        }
+                        else
+                        {
+                            czy_ponownie.Join(Grafy[i]);
+                            Grafy.RemoveAt(i);
+                            break;
+                        }
+                    }                  
+                }
+            }
+           
+
+        }
+
+    }
+
+
+}
